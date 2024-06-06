@@ -4,6 +4,7 @@ from src.application.logic.commands.base import BaseCommand, CommandHandler
 from src.application.logic.exceptions.messages import ChatWithTitleAlreadyExistException
 from src.domain.entities.messages import Chat
 from src.domain.value_objects.messages import Value
+from src.infrastructure.repositories.chat import BaseChatRespository
 
 
 @dataclass

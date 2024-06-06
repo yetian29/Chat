@@ -21,3 +21,6 @@ class Chat(BaseEntity):
                 message_content=message.content.as_string(),
             )
         )
+
+    def __hash__(self) -> int:
+        return hash(self.id)
