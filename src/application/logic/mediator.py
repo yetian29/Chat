@@ -26,13 +26,13 @@ class Mediator:
         self.commands_map[command_type] = command_handler
 
     def handle_event(self, event_type: ET) -> ER:
-        event_handler = self.events_map[event_type]
+        event_handler = self.events_map.get(event_type)
         if event_handler:
             return event_handler.handle(event_type)
         raise EventHandlerNoPushedException(event_type)
 
     def handle_command(self, command_type: CT) -> CR:
-        command_handler = self.commands_map[command_type]
+        command_handler = self.commands_map.get(command_type)
         if command_handler:
             return command_handler.handle(command_type)
         raise CommandHandlerNoPushedException(command_type)

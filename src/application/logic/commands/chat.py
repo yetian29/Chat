@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
 from src.application.logic.commands.base import BaseCommand, CommandHandler
-from src.application.logic.exceptions.messages import ChatWithTitleAlreadyExistException
-from src.domain.entities.messages import Chat
-from src.domain.value_objects.messages import Value
+from src.application.logic.exceptions.chat import ChatWithTitleAlreadyExistException
+from src.domain.entities.chat import Chat
+from src.domain.value_objects.value import Value
 from src.infrastructure.repositories.chat import BaseChatRespository
 
 
@@ -12,6 +12,7 @@ class CreateChatCommand(BaseCommand):
     title: str
 
 
+@dataclass
 class CreateChatCommandHandler(CommandHandler[CreateChatCommand, Chat]):
     chat_repository: BaseChatRespository
 
@@ -19,5 +20,5 @@ class CreateChatCommandHandler(CommandHandler[CreateChatCommand, Chat]):
         if self.chat_repository.check_chat_exist_by_title(command.title):
             raise ChatWithTitleAlreadyExistException(command.title)
         title = Value(value=command.title)
-        chat = Chat(title=title)
+        chat = Chat.create_chat(title=title)
         return chat
