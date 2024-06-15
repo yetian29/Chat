@@ -1,7 +1,11 @@
 from abc import ABC, abstractmethod
+from typing import Any, Generic, TypeVar
+
+T = TypeVar("T", bound=Any)
 
 
-class BaseValueObjects(ABC):
+class BaseValueObject(ABC, Generic[T]):
+    value: T
 
     def __post_init__(self):
         self.validate()
@@ -10,4 +14,4 @@ class BaseValueObjects(ABC):
     def validate(self) -> None: ...
 
     @abstractmethod
-    def as_string(self) -> str: ...
+    def as_generic_type(self) -> T: ...

@@ -1,4 +1,4 @@
-class BaseApplicationException(Exception):
-    @property
-    def message(self):
-        return "Application exception occured"
+class BaseAppException(Exception):
+    def __init__(self, message: str):
+        self.message = message
+        super().__init__(message)

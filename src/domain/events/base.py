@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
-from uuid import UUID, uuid4
+from datetime import datetime
+from uuid import uuid4
 
 
 @dataclass
 class BaseEvent:
-    event_id: UUID = field(default_factory=uuid4, kw_only=True)
+    eid: str = field(default_factory=lambda: str(uuid4()), kw_only=True)
+    registered_at: datetime = field(default_factory=datetime.now, kw_only=True)

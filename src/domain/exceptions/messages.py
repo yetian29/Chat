@@ -1,18 +1,11 @@
-from dataclasses import dataclass
-
-from src.domain.exceptions.base import BaseApplicationException
+from src.domain.exceptions.base import BaseAppException
 
 
-class EmptyContentException(BaseApplicationException):
-    @property
-    def message(self):
-        return "No Content"
+class EmptyMessageException(BaseAppException):
+    def __init__(self):
+        super().__init__("Message cannot is empty")
 
 
-@dataclass
-class TooLongContentException(BaseApplicationException):
-    value: str
-
-    @property
-    def message(self):
-        return f"The Content is too long compared to regulation, {self.value[:255]}..."
+class TooLongMessageException(BaseAppException):
+    def __init__(self):
+        super().__init__("Message cannot be logger than 255 characters")

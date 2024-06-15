@@ -1,35 +1,22 @@
 from dataclasses import dataclass, field
-from typing import Set
 
 from src.domain.entities.base import BaseEntity
 from src.domain.entities.message import Message
-from src.domain.events.chat import NewChatCreated
-from src.domain.events.message import NewMessageReceivedEvent
-from src.domain.value_objects.value import Value
+from src.domain.events.chat import NewMessageReceivedEvent
+from src.domain.value_objects.message import Text
 
 
 @dataclass
 class Chat(BaseEntity):
-    title: Value
-    messages: Set[Message] = field(default_factory=set, kw_only=True)
+    title: Text
+    messages: list[Message] = field(default_factory=list, kw_only=True)
 
-    @classmethod
-    def create_chat(cls, title: Value):
-        new_chat = cls(title=title)
-        new_chat.push_event(
-            NewChatCreated(chat_id=new_chat.id, title=new_chat.title.as_string())
-        )
-        return new_chat
-
-    def add_message_to_chat(self, message: Message):
-        self.messages.add(message)
-        self.push_event(
+    def add_message_to_chat(self, message: Message) -> None:
+        self.messages.append(message)
+        self.register_event(
             NewMessageReceivedEvent(
-                chat_id=self.id,
-                message_id=message.id,
-                message_content=message.content.as_string(),
+                chat_oid=self.oid,
+                message_oid=message.oid,
+                message_content=message.content.as_generic_type(),
             )
         )
-
-    def __hash__(self) -> int:
-        return hash(self.id)
