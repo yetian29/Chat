@@ -2,7 +2,11 @@ from datetime import datetime
 
 from src.domain.entities.chat import Chat
 from src.domain.entities.message import Message
-from src.domain.events.chat import NewChatCreatedEvent, NewMessageReceivedEvent
+from src.domain.events.chat import (
+    ChatDeletedEvent,
+    NewChatCreatedEvent,
+    NewMessageReceivedEvent,
+)
 from src.domain.value_objects.message import Text
 
 
@@ -46,3 +50,17 @@ def test_chat_events():
     assert second_event.chat_oid == chat.oid
     assert second_event.message_oid == message.oid
     assert second_event.message_content == message.content.as_generic_type()
+
+
+def test_delete_chat_success():
+
+    title = Text(value="Hola")
+    chat = Chat.create_chat(title=title)
+    chat.delete_chat()
+    events = chat.pull_events()
+    assert len(events) == 2
+
+    second_event = events[1]
+    assert isinstance(second_event, ChatDeletedEvent)
+    assert second_event.chat_oid == chat.oid
+    assert second_event.title == title.as_generic_type()
