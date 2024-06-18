@@ -21,6 +21,9 @@ class BaseEntity:
         self.events.clear()
         return events
 
+    def __hash__(self) -> int:
+        return hash(self.oid)
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, BaseEntity):
             return self.oid == other.oid

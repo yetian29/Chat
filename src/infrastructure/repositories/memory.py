@@ -7,11 +7,8 @@ from src.infrastructure.repositories.base import BaseChatRepository
 
 @dataclass
 class MemoryChatRepository(BaseChatRepository):
-    _chats: list[Chat] = field(default_factory=list, kw_only=True)
+    _chats: set[Chat] = field(default_factory=set, kw_only=True)
+    title_index: dict[str, Chat] = field(default_factory=dict, kw_only=True)
 
     def get_chat_by_title(self, title: str) -> Optional[Chat]:
-        for chat in self._chats:
-            if chat.title.as_generic_type() == title:
-                return chat
-
-        return None
+        return self.title_index.get(title)  # return chat or None
