@@ -1,5 +1,7 @@
+from abc import ABC
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any, Generic, TypeVar
 from uuid import uuid4
 
 
@@ -7,3 +9,11 @@ from uuid import uuid4
 class BaseEvent:
     eid: str = field(default_factory=lambda: str(uuid4()), kw_only=True)
     registered_at: datetime = field(default_factory=datetime.now, kw_only=True)
+
+
+ET = TypeVar("ET", bound=BaseEvent)
+ER = TypeVar("ER", bound=Any)
+
+
+class BaseEventHandler(ABC, Generic[ET, ER]):
+    def handle(self, event: ET) -> ER: ...

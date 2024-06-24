@@ -1,11 +1,11 @@
 from collections import defaultdict
 from dataclasses import dataclass, field
 
-from src.logic.commands.base import CT, BaseCommandHandler
+from src.logic.events.base import ET, BaseEvent
 
 
 @dataclass
-class CommandMediator:
-    commands_map: dict[CT, list[BaseCommandHandler]] = field(
+class EventMediator:
+    events_map: dict[ET, list[BaseEvent]] = field(
         default_factory=lambda: defaultdict(list), kw_only=True
     )
