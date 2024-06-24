@@ -8,24 +8,22 @@ from src.infrastructure.repositories.filters.chat import GetChatsFilters
 
 @dataclass
 class MemoryChatRepository(BaseChatRepository):
-    _chats: dict[int, Chat] = field(default_factory=dict, kw_only=True)
+    _chats: dict[str, Chat] = field(default_factory=dict, kw_only=True)
+    _title_index: dict[str, list[Chat]] = field(default_factory=dict, kw_only=True)
 
     def save_chat(self, chat: Chat) -> None:
-        oid = chat.oid
-        oid_hash = hash(oid)
-        self._chats[oid_hash] = chat
+        self._chats[chat.oid] = chat
+        title = chat.title.as_generic_type()
+        if title not in self._title_index:
+            self._title_index[title] = []
+        self._title_index[title].append(chat)
 
-    def get_chat_by_title(self, title: str) -> Optional[Chat]:
-        for chat in self._chats.values():
-            if chat.title.as_generic_type() == title:
-                return chat
-
-        return None
+    def get_chat_by_title(self, title: str) -> Optional[list[Chat]]:
+        return self._title_index.get(title, None)
 
     def get_chat_by_oid(self, oid: str) -> Optional[Chat]:
-        oid_hash = hash(oid)
 
-        return self._chats.get(oid_hash)
+        return self._chats.get(oid)
 
     def get_all_chats(self, filters: GetChatsFilters) -> list[Chat]:
         return list(self._chats.values())[filters.offset : filters.limit]
