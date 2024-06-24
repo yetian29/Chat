@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from uuid import uuid4
 
-from src.domain.events.base import BaseEvent
+from src.logic.events.base import BaseEvent
 
 
 @dataclass

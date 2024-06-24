@@ -2,12 +2,12 @@ from datetime import datetime
 
 from src.domain.entities.chat import Chat
 from src.domain.entities.message import Message
-from src.domain.events.chat import (
+from src.domain.value_objects.message import Text
+from src.logic.events.chat import (
     ChatDeletedEvent,
     NewChatCreatedEvent,
     NewMessageReceivedEvent,
 )
-from src.domain.value_objects.message import Text
 
 
 def test_create_chat_success():

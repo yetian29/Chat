@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import ClassVar
 
-from src.domain.events.base import BaseEvent
+from src.logic.events.base import BaseEvent
 
 
 @dataclass

@@ -13,9 +13,10 @@ class CreateMessageCommand(BaseCommand):
 
 
 class CreateMessageCommandHandler(BaseCommandHandler[CreateMessageCommand, Message]):
+    chat_repository: BaseChatRepository
+
     def handle(self, command: CreateMessageCommand) -> Message:
-        chat_repository: BaseChatRepository
-        chat = chat_repository.get_chat_by_oid(oid=command.chat_oid)
+        chat = self.chat_repository.get_chat_by_oid(oid=command.chat_oid)
         if not chat:
             raise ChatNotFoundException(oid=command.chat_oid)
 
