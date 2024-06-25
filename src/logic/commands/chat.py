@@ -20,12 +20,12 @@ class CreateChatCommand(BaseCommand):
 class CreateChatCommandHandler(BaseCommandHandler[CreateChatCommand, Chat]):
     chat_repository: BaseChatRepository
 
-    def handle(self, command: CreateChatCommand) -> Chat:
-        if self.chat_repository.check_chat_exist_by_title(title=command.title):
+    async def handle(self, command: CreateChatCommand) -> Chat:
+        if await self.chat_repository.check_chat_exist_by_title(title=command.title):
             raise ChatWithTitleAlreadyExistException(title=command.title)
 
         chat = Chat.create_chat(title=Text(value=command.title))
-        self.chat_repository.save_chat(chat)
+        await self.chat_repository.save_chat(chat)
         return chat
 
 
